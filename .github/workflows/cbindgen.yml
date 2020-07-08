@@ -68,8 +68,8 @@ jobs:
     - name: Test
       if: matrix.os == 'windows-latest'
       env:
-        CC: gcc
-        CXX: g++
+        CC: x86_64-w64-mingw32-gcc
+        CXX: x86_64-w64-mingw32-g++
         CBINDGEN_TEST_VERIFY: 1
       run: |
         cargo test --verbose
