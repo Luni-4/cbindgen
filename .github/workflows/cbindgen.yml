@@ -1,12 +1,6 @@
 name: cbindgen
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+on: push
 
 jobs:
   rustfmt-clippy:
@@ -38,7 +32,11 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -60,6 +58,8 @@ jobs:
 
     - name: Test
       env:
+        CC: gcc-8
+        CXX: g++-8
         CBINDGEN_TEST_VERIFY: 1
       run: |
         cargo test --verbose
@@ -69,5 +69,8 @@ jobs:
         cargo update -Zminimal-versions
 
     - name: Test minimal-versions
+      env:
+        CC: gcc-8
+        CXX: g++-8
       run: |
         cargo test
